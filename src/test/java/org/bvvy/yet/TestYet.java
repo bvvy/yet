@@ -1,5 +1,6 @@
 package org.bvvy.yet;
 
+import org.bvvy.yet.context.Context;
 import org.bvvy.yet.sheet.Column;
 import org.bvvy.yet.sheet.Sheet;
 import org.junit.jupiter.api.Test;
@@ -16,11 +17,17 @@ public class TestYet {
     public void test() {
 
         Column policyYear = new Column("policyYear", "i + 1");
-        Column standardPremium = new Column("standardPremium", "ROUND(sumAssured * premiumRate[i] / 1000,2)");
+        Column sumAssured = new Column("sumAssured", "#sumAssured");
+        Column standardPremium = new Column("standardPremium", "ROUND(sumAssured * premiumRate / 1000,2)");
         Column modalPremium = new Column("modalPremium", "standardPremium * modalFactor");
         Column annualizedPremium = new Column("annualizedPremium", "modalPremium * premiumFrequency");
         List<Column> columns = Arrays.asList(policyYear, standardPremium, modalPremium, annualizedPremium);
         Sheet sheet = new Sheet(columns);
+        Yet yet = new Yet();
+        Context context = new Context();
+        yet.calculate(policyYear, context);
+        yet.calculate(sheet, context);
+
 //        Yet yet = new Yet(sheet);
 //        yet.calculate("standardPremium");
 //        yet.calculate("policyYear[1]");
