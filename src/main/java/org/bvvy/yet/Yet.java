@@ -16,5 +16,4 @@ public class Yet {
     public void calculate(Sheet sheet, Context context) {
 
     }
-
 }
