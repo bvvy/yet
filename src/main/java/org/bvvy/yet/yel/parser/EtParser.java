@@ -63,9 +63,9 @@ public class EtParser extends YelParser {
             } else if (tk == TokenKind.GE) {
                 return new OpGE(t.getStartPos(), t.getEndPos(), expr, rhExpr);
             } else if (tk == EtTokenKind.EQ) {
-                return new OpEQ(t.getStartPos(), t.getEndPos(), expr, rhExpr);
+                return new OpEQ("=", t.getStartPos(), t.getEndPos(), expr, rhExpr);
             } else {
-                return new OpNE(t.getStartPos(), t.getEndPos(), expr, rhExpr);
+                return new OpNE("<>", t.getStartPos(), t.getEndPos(), expr, rhExpr);
             }
         }
         return expr;
