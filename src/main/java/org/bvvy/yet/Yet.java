@@ -1,7 +1,6 @@
 package org.bvvy.yet;
 
-import org.bvvy.yet.context.Context;
-import org.bvvy.yet.sheet.Column;
+import org.bvvy.yet.sheet.Selection;
 import org.bvvy.yet.sheet.Sheet;
 
 /**
@@ -9,11 +8,7 @@ import org.bvvy.yet.sheet.Sheet;
  */
 public class Yet {
 
-    public void calculate(Column column, Context context) {
-
-    }
-
-    public void calculate(Sheet sheet, Context context) {
+    public void calculate(Sheet sheet, Selection selection) {
 
     }
 }

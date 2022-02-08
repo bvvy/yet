@@ -7,9 +7,13 @@ import java.util.List;
  */
 public class Sheet {
     private List<Column> columns;
+    private SheetOption sheetOption;
 
-    public Sheet(List<Column> columns) {
+    public Sheet(SheetOption sheetOption) {
+        this.sheetOption = sheetOption;
+    }
 
-        this.columns = columns;
+    public void addColumn(Column column) {
+        columns.add(column);
     }
 }
