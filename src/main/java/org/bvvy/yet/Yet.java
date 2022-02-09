@@ -8,7 +8,8 @@ import org.bvvy.yet.sheet.Sheet;
  */
 public class Yet {
 
-    public void calculate(Sheet sheet, Selection selection) {
+    private YetConfig yetConfig;
 
+    public void calculate(Sheet sheet, Selection selection) {
     }
 }
