@@ -1,5 +1,6 @@
 package org.bvvy.yet;
 
+import org.bvvy.yet.calculator.SheetValue;
 import org.bvvy.yet.context.Context;
 import org.bvvy.yet.sheet.Column;
 import org.bvvy.yet.sheet.Selection;
@@ -31,11 +32,11 @@ public class TestYet {
         sheet.addColumn(standardPremium);
         sheet.addColumn(modalPremium);
         sheet.addColumn(annualizedPremium);
-//        sheet.calculate(context);
-        Context context = new Context();
+
+
         Selection selection = new Selection();
         Yet yet = new Yet();
-        yet.calculate(sheet, selection);
+        SheetValue sheetValue = yet.calculate(sheet, selection);
 
     }
 
