@@ -6,18 +6,18 @@ package org.bvvy.yet.sheet;
  */
 public class SelectionOption {
     private String columnName;
-    private int[] index;
+    private int[] indexes;
 
-    public SelectionOption(String columnName, int[] index) {
+    public SelectionOption(String columnName, int[] indexes) {
         this.columnName = columnName;
-        this.index = index;
+        this.indexes = indexes;
     }
 
     public String getColumnName() {
         return columnName;
     }
 
-    public int[] getIndex() {
-        return index;
+    public int[] getIndexes() {
+        return indexes;
     }
 }

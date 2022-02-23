@@ -15,6 +15,7 @@ public class Yet {
     private SheetResolver sheetResolver;
 
     public Yet() {
+        this.yetConfig = new YetConfig();
         this.sheetResolver = new SheetResolver(yetConfig);
     }
 

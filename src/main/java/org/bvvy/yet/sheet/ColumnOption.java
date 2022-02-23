@@ -6,4 +6,15 @@ package org.bvvy.yet.sheet;
  */
 public class ColumnOption {
 
+    private int start;
+    private int end;
+
+    public int getStart() {
+        return start;
+    }
+
+    public int getEnd() {
+        return end;
+    }
+
 }

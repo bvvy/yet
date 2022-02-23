@@ -1,10 +1,7 @@
 package org.bvvy.yet.calculator;
 
 import org.bvvy.yel.exp.Expression;
-import org.bvvy.yet.context.Context;
-import org.bvvy.yet.sheet.Column;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,13 +10,16 @@ import java.util.Map;
  */
 public class InnerColumn {
 
-    private Map<Integer, Expression> cells = new HashMap<>();
-    private Column column;
+    private Map<Integer, Expression> cells;
 
-    public InnerColumn(Column column) {
-        this.column = column;
+    public InnerColumn(Map<Integer, Expression> cells) {
+        this.cells = cells;
     }
 
-    public void x(Context context) {
+    public void calculate(SheetContext context) {
+    }
+
+    public Expression getCell(int index) {
+        return cells.get(index);
     }
 }

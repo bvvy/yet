@@ -1,5 +1,9 @@
 package org.bvvy.yet.calculator;
 
+import org.bvvy.yel.exp.Expression;
+import org.bvvy.yet.sheet.SelectionOption;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,13 +13,18 @@ import java.util.Map;
 public class InnerSheet {
 
 
-    private Map<String, InnerColumn> columnMap;
+    private Map<String, InnerColumn> innerColumns;
 
-    public InnerSheet() {
+    public InnerSheet(Map<String, InnerColumn> innerColumns) {
+        this.innerColumns = innerColumns;
+    }
+
+    public InnerColumn getColumn(String columnName) {
+        return innerColumns.get(columnName);
     }
 
 
-    public InnerColumn getColumn(String columnName) {
-        return columnMap.get(columnName);
+    public boolean containsColumn(String columnName) {
+        return innerColumns.containsKey(columnName);
     }
 }

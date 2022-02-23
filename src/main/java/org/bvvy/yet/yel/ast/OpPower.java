@@ -1,5 +1,7 @@
 package org.bvvy.yet.yel.ast;
 
+import org.bvvy.yel.exp.ExpressionState;
+import org.bvvy.yel.exp.TypedValue;
 import org.bvvy.yel.exp.ast.Node;
 import org.bvvy.yel.exp.ast.Operator;
 
@@ -10,5 +12,10 @@ import org.bvvy.yel.exp.ast.Operator;
 public class OpPower extends Operator {
     public OpPower(int startPos, int endPos, Node ... operand) {
         super("^", startPos, endPos, operand);
+    }
+
+    @Override
+    public TypedValue getValueInternal(ExpressionState state) {
+        return null;
     }
 }
