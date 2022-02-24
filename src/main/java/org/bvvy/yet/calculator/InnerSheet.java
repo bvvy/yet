@@ -1,10 +1,7 @@
 package org.bvvy.yet.calculator;
 
-import org.bvvy.yel.exp.Expression;
-import org.bvvy.yet.sheet.SelectionOption;
-
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author bvvy
@@ -12,11 +9,10 @@ import java.util.Map;
  */
 public class InnerSheet {
 
+    private Map<String, InnerColumn> innerColumns = new ConcurrentHashMap<>();
 
-    private Map<String, InnerColumn> innerColumns;
-
-    public InnerSheet(Map<String, InnerColumn> innerColumns) {
-        this.innerColumns = innerColumns;
+    public void addColumn(InnerColumn column) {
+        innerColumns.put(column.getName(), column);
     }
 
     public InnerColumn getColumn(String columnName) {

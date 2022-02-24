@@ -2,10 +2,7 @@ package org.bvvy.yet.calculator;
 
 import org.bvvy.yel.exp.Expression;
 import org.bvvy.yet.YetConfig;
-import org.bvvy.yet.sheet.Column;
-import org.bvvy.yet.sheet.ColumnOption;
-import org.bvvy.yet.sheet.Sheet;
-import org.bvvy.yet.sheet.SheetOption;
+import org.bvvy.yet.sheet.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,9 +23,9 @@ public class SheetResolver {
         SheetOption sheetOption = sheet.getSheetOption();
         int start = sheetOption.getStart();
         int end = sheetOption.getEnd();
-        Map<Integer, Expression> cells = new HashMap<>();
-        Map<String, InnerColumn> innerColumns = new HashMap<>();
+        InnerSheet innerSheet = new InnerSheet();
         for (Column column : sheet.getColumns()) {
+            InnerColumn innerColumn = new InnerColumn(column.getName());
             Expression expression = yetConfig.getYelParser().parse(column.getFormula());
             ColumnOption columnOption = column.getColumnOption();
             if (columnOption != null) {
@@ -36,12 +33,10 @@ public class SheetResolver {
                 end = columnOption.getEnd();
             }
             for (int i = start; i <= end; i++) {
-                cells.put(i, expression);
+                innerColumn.addCell(new Cell(i, expression));
             }
-            InnerColumn innerColumn = new InnerColumn(cells);
-            innerColumns.put(column.getName(), innerColumn);
+            innerSheet.addColumn(innerColumn);
         }
-        InnerSheet innerSheet = new InnerSheet(innerColumns);
         return new SheetCalculator(innerSheet);
     }
 }
