@@ -11,6 +11,7 @@ import org.bvvy.yel.parser.YelParserConfig;
 import org.bvvy.yet.yel.ast.OpConcat;
 import org.bvvy.yet.yel.ast.OpPercent;
 import org.bvvy.yet.yel.ast.OpPower;
+import org.bvvy.yet.yel.ast.YetIndexer;
 import org.bvvy.yet.yel.token.EtTokenKind;
 import org.bvvy.yet.yel.token.EtTokenizer;
 
@@ -132,5 +133,15 @@ public class EtParser extends YelParser {
         return expr;
     }
 
-
+    @Override
+    protected boolean maybeEatIndexer() {
+        Token t = peekToken();
+        if (!peekToken(TokenKind.LSQUARE, true)) {
+            return false;
+        }
+        Node expr = eatExpression();
+        eatToken(TokenKind.RSQUARE);
+        this.constructedNodes.push(new YetIndexer(t.getStartPos(), t.getEndPos(), expr));
+        return true;
+    }
 }

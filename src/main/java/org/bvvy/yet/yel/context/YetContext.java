@@ -9,6 +9,7 @@ import org.bvvy.yel.context.method.MethodResolver;
 import org.bvvy.yel.context.method.StandardTypeConverter;
 import org.bvvy.yel.context.method.TypeConverter;
 import org.bvvy.yel.exp.TypedValue;
+import org.bvvy.yet.calculator.InnerSheet;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,13 +17,15 @@ import java.util.List;
 public class YetContext implements Context {
 
     private TypedValue rootObject;
+    private InnerSheet sheet;
 
     public YetContext() {
         this.rootObject = TypedValue.NULL;
     }
 
-    public YetContext(Object rootObject) {
-        this.rootObject = new TypedValue(rootObject);
+    public YetContext(Object rootObject, InnerSheet sheet) {
+//        this.rootObject = new TypedValue(rootObject);
+        this.rootObject = new TypedValue(sheet);
     }
 
     @Override
