@@ -25,6 +25,7 @@ public class YetContext implements Context {
 
     public YetContext(Object rootObject, InnerSheet sheet) {
 //        this.rootObject = new TypedValue(rootObject);
+        this.sheet = sheet;
         this.rootObject = new TypedValue(sheet);
     }
 

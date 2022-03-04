@@ -3,9 +3,12 @@ package org.bvvy.yet.yel.ast;
 import org.bvvy.yel.exception.YelEvalException;
 import org.bvvy.yel.exp.ExpressionState;
 import org.bvvy.yel.exp.TypedValue;
+import org.bvvy.yel.exp.ValueRef;
 import org.bvvy.yel.exp.YelMessage;
 import org.bvvy.yel.exp.ast.Node;
 import org.bvvy.yel.exp.ast.NodeImpl;
+import org.bvvy.yel.util.NumberUtils;
+import org.bvvy.yet.calculator.Cell;
 import org.bvvy.yet.calculator.InnerColumn;
 
 public class YetIndexer extends NodeImpl {
@@ -15,7 +18,11 @@ public class YetIndexer extends NodeImpl {
 
     @Override
     public TypedValue getValueInternal(ExpressionState state) {
+        return getValueRef(state).getValue();
+    }
 
+    @Override
+    public ValueRef getValueRef(ExpressionState state) {
         TypedValue context = state.getActiveContextObject();
         Object target = context.getValue();
         TypedValue indexValue;
@@ -30,9 +37,16 @@ public class YetIndexer extends NodeImpl {
         state.popActiveContextObject();
 
         if (target instanceof InnerColumn) {
-
+            Integer idx = NumberUtils.convertNumberToTargetClass((Number) index, Integer.class);
+            InnerColumn column = (InnerColumn) target;
+            Cell cell = column.getCell(idx);
+            Object value = cell.getValue(state.getContext());
+            return () -> new TypedValue(value);
         }
 
         throw new YelEvalException(YelMessage.NOT_ASSIGNABLE);
     }
+
+
+
 }

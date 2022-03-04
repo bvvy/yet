@@ -1,6 +1,7 @@
-package org.bvvy.yet.sheet;
+package org.bvvy.yet.calculator;
 
 
+import org.bvvy.yel.context.Context;
 import org.bvvy.yel.exp.Expression;
 import org.bvvy.yet.yel.context.YetContext;
 
@@ -20,7 +21,11 @@ public class Cell {
         return index;
     }
 
-    public Object getValue(YetContext yetContext) {
+    public boolean isCalculated() {
+        return calculated;
+    }
+
+    public Object getValue(Context yetContext) {
         if (!calculated) {
             this.value = expression.getValue(yetContext);
             this.calculated = true;

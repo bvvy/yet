@@ -1,7 +1,5 @@
 package org.bvvy.yet.calculator;
 
-import org.bvvy.yet.sheet.Cell;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -31,5 +29,10 @@ public class InnerColumn {
 
     public String getName() {
         return this.name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }
