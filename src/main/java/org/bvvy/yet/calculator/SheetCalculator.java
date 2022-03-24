@@ -13,7 +13,6 @@ import java.util.List;
  */
 public class SheetCalculator {
     private InnerSheet innerSheet;
-    private YelParser yelParser;
 
     public SheetCalculator(InnerSheet innerSheet) {
         this.innerSheet = innerSheet;
@@ -26,6 +25,7 @@ public class SheetCalculator {
             InnerColumn column = innerSheet.getColumn(option.getColumnName());
             for (int index : option.getIndexes()) {
                 Cell cell = column.getCell(index);
+                yetContext.setIteratorKey(cell.getIteratorKey());
                 cell.getValue(yetContext);
             }
         }

@@ -70,7 +70,7 @@ public class EtTokenizer extends Tokenizer {
                         pushCharToken(EtTokenKind.POWER);
                         break;
                     case '=':
-                        pushPairToken(EtTokenKind.EQ);
+                        pushCharToken(EtTokenKind.EQ);
                         break;
                     case '&':
                         pushCharToken(EtTokenKind.CONCAT);

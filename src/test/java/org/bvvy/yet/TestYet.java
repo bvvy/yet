@@ -23,7 +23,7 @@ public class TestYet {
         Column modalFactor = new Column("modalFactor", "0.0853");
 
         Column standardPremium = new Column("standardPremium", "sumAssured[i] * premiumRate[i] / 1000");
-        Column totalStandardPremium = new Column("totalStandardPremium", "totalStandardPremium[i-1] + standardPremium[i]");
+        Column totalStandardPremium = new Column("totalStandardPremium", "i=0 ? 0 : totalStandardPremium[i-1] + standardPremium[i]");
         Column modalPremium = new Column("modalPremium", "standardPremium[i] * modalFactor[i]");
         Column annualizedPremium = new Column("annualizedPremium", "modalPremium[i] * premiumFrequency[i]");
 
@@ -37,7 +37,7 @@ public class TestYet {
         sheet.addColumn(modalPremium);
         sheet.addColumn(annualizedPremium);
         sheet.addColumn(totalStandardPremium);
-        SelectionOption option = new SelectionOption("totalStandardPremium", new int[]{1});
+        SelectionOption option = new SelectionOption("modalPremium", new int[]{1});
         Selection selection = new Selection(env, Collections.singletonList(option));
 
         Yet yet = new Yet();

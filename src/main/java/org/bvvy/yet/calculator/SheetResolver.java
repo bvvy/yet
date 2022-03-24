@@ -2,7 +2,10 @@ package org.bvvy.yet.calculator;
 
 import org.bvvy.yel.exp.Expression;
 import org.bvvy.yet.YetConfig;
-import org.bvvy.yet.sheet.*;
+import org.bvvy.yet.sheet.Column;
+import org.bvvy.yet.sheet.ColumnOption;
+import org.bvvy.yet.sheet.Sheet;
+import org.bvvy.yet.sheet.SheetOption;
 
 /**
  * @author bvvy
@@ -20,6 +23,8 @@ public class SheetResolver {
         SheetOption sheetOption = sheet.getSheetOption();
         int start = sheetOption.getStart();
         int end = sheetOption.getEnd();
+        String iteratorKey = sheetOption.getIteratorKey();
+
         InnerSheet innerSheet = new InnerSheet();
         for (Column column : sheet.getColumns()) {
             InnerColumn innerColumn = new InnerColumn(column.getName());
@@ -30,7 +35,7 @@ public class SheetResolver {
                 end = columnOption.getEnd();
             }
             for (int i = start; i <= end; i++) {
-                innerColumn.addCell(new Cell(i, expression));
+                innerColumn.addCell(new Cell(i, expression, iteratorKey));
             }
             innerSheet.addColumn(innerColumn);
         }

@@ -8,16 +8,20 @@ import org.bvvy.yel.context.method.GlobalMethodResolver;
 import org.bvvy.yel.context.method.MethodResolver;
 import org.bvvy.yel.context.method.StandardTypeConverter;
 import org.bvvy.yel.context.method.TypeConverter;
+import org.bvvy.yel.exp.ExpressionState;
 import org.bvvy.yel.exp.TypedValue;
 import org.bvvy.yet.calculator.InnerSheet;
 
+import java.util.ArrayDeque;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.List;
 
 public class YetContext implements Context {
 
-    private TypedValue rootObject;
-    private InnerSheet sheet;
+    private final TypedValue rootObject;
+    private String iteratorKey;
+    private final Deque<Integer> indexContext = new ArrayDeque<>();
 
     public YetContext() {
         this.rootObject = TypedValue.NULL;
@@ -25,8 +29,31 @@ public class YetContext implements Context {
 
     public YetContext(Object rootObject, InnerSheet sheet) {
 //        this.rootObject = new TypedValue(rootObject);
-        this.sheet = sheet;
         this.rootObject = new TypedValue(sheet);
+    }
+
+    public Integer getActiveIndexContext() {
+        return indexContext.element();
+    }
+
+    public void pushIndexContext(int index) {
+        indexContext.push(index);
+    }
+
+    public void popIndexContext() {
+        indexContext.pop();
+    }
+
+    public ExpressionState getYelExpressionState(Context context) {
+        return new ExpressionState(context);
+    }
+
+    public void setIteratorKey(String iteratorKey) {
+        this.iteratorKey = iteratorKey;
+    }
+
+    public String getIteratorKey() {
+        return iteratorKey;
     }
 
     @Override

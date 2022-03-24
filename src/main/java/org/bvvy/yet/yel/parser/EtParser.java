@@ -8,10 +8,8 @@ import org.bvvy.yel.exp.token.TokenKind;
 import org.bvvy.yel.exp.token.Tokenizer;
 import org.bvvy.yel.parser.YelParser;
 import org.bvvy.yel.parser.YelParserConfig;
-import org.bvvy.yet.yel.ast.OpConcat;
-import org.bvvy.yet.yel.ast.OpPercent;
-import org.bvvy.yet.yel.ast.OpPower;
-import org.bvvy.yet.yel.ast.YetIndexer;
+import org.bvvy.yet.yel.YetExpression;
+import org.bvvy.yet.yel.ast.*;
 import org.bvvy.yet.yel.token.EtTokenKind;
 import org.bvvy.yet.yel.token.EtTokenizer;
 
@@ -40,7 +38,7 @@ public class EtParser extends YelParser {
         this.constructedNodes.clear();
         this.tokenStreamPointer = 0;
         Node ast = this.eatExpression();
-        return new YelExpression(ast, this.configuration);
+        return new YetExpression(ast, this.configuration);
     }
 
     protected Node eatExpression() {
@@ -143,5 +141,21 @@ public class EtParser extends YelParser {
         eatToken(TokenKind.RSQUARE);
         this.constructedNodes.push(new YetIndexer(t.getStartPos(), t.getEndPos(), expr));
         return true;
+    }
+
+    protected boolean maybeEatMethodProperty(boolean nullSafeNavigation) {
+        if (peekToken(TokenKind.IDENTIFIER)) {
+            Token methodOrPropertyName = takeToken();
+            Node[] args = maybeEatMethodArgs();
+            if (args == null) {
+                push(new ColumnReference(nullSafeNavigation, methodOrPropertyName.stringValue(),
+                        methodOrPropertyName.getStartPos(), methodOrPropertyName.getEndPos()));
+                return true;
+            }
+            push(new MethodReference(nullSafeNavigation, methodOrPropertyName.stringValue(),
+                    methodOrPropertyName.getStartPos(), methodOrPropertyName.getEndPos(), args));
+            return true;
+        }
+        return false;
     }
 }

@@ -10,6 +10,8 @@ import org.bvvy.yel.exp.ast.NodeImpl;
 import org.bvvy.yel.util.NumberUtils;
 import org.bvvy.yet.calculator.Cell;
 import org.bvvy.yet.calculator.InnerColumn;
+import org.bvvy.yet.yel.ErrorTypedValue;
+import org.bvvy.yet.yel.YetExpressionState;
 
 public class YetIndexer extends NodeImpl {
     public YetIndexer(int startPos, int endPos, Node expr) {
@@ -38,9 +40,15 @@ public class YetIndexer extends NodeImpl {
 
         if (target instanceof InnerColumn) {
             Integer idx = NumberUtils.convertNumberToTargetClass((Number) index, Integer.class);
+            if (idx < 0) {
+                return () -> ErrorTypedValue.REF_ERR;
+            }
+            YetExpressionState expressionState = (YetExpressionState) state;
+            expressionState.pushIndexContext(idx);
             InnerColumn column = (InnerColumn) target;
             Cell cell = column.getCell(idx);
             Object value = cell.getValue(state.getContext());
+            expressionState.popIndexContext();
             return () -> new TypedValue(value);
         }
 
