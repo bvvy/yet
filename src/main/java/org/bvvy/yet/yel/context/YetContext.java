@@ -8,6 +8,7 @@ import org.bvvy.yel.context.method.GlobalMethodResolver;
 import org.bvvy.yel.context.method.MethodResolver;
 import org.bvvy.yel.context.method.StandardTypeConverter;
 import org.bvvy.yel.context.method.TypeConverter;
+import org.bvvy.yel.context.overloader.OperatorOverloader;
 import org.bvvy.yel.exp.ExpressionState;
 import org.bvvy.yel.exp.TypedValue;
 import org.bvvy.yet.calculator.InnerSheet;
@@ -79,5 +80,10 @@ public class YetContext implements Context {
     @Override
     public TypeConverter getTypeConverter() {
         return new StandardTypeConverter();
+    }
+
+    @Override
+    public OperatorOverloader getOperatorOverloader() {
+        return new YetOperatorOverloader();
     }
 }

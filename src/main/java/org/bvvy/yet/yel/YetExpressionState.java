@@ -10,15 +10,13 @@ import java.util.Deque;
 
 public class YetExpressionState extends ExpressionState {
 
-    private final String iteratorKey;
-
-    public YetExpressionState(Context context, String iteratorKey) {
+    public YetExpressionState(Context context) {
         super(context);
-        this.iteratorKey = iteratorKey;
     }
 
     public String getIteratorKey() {
-        return iteratorKey;
+        YetContext context = (YetContext) getContext();
+        return context.getIteratorKey();
     }
 
     public Integer getActiveIndexContext() {

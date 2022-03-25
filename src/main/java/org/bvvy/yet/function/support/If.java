@@ -1,4 +1,4 @@
 package org.bvvy.yet.function.support;
 
-public class IF {
+public class If {
 }

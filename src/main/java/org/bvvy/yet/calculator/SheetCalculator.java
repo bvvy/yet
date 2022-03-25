@@ -1,6 +1,5 @@
 package org.bvvy.yet.calculator;
 
-import org.bvvy.yel.parser.YelParser;
 import org.bvvy.yet.sheet.Selection;
 import org.bvvy.yet.sheet.SelectionOption;
 import org.bvvy.yet.yel.context.YetContext;
