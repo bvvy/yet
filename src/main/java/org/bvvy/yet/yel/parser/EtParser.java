@@ -13,6 +13,7 @@ import org.bvvy.yet.yel.ast.*;
 import org.bvvy.yet.yel.token.EtTokenKind;
 import org.bvvy.yet.yel.token.EtTokenizer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -130,6 +131,32 @@ public class EtParser extends YelParser {
             expr = new OpPercent(t.getStartPos(), t.getEndPos(), expr);
         }
         return expr;
+    }
+
+    protected Node eatPrimaryExpression() {
+        Node start = eatStartNode();
+        List<Node> nodes = null;
+        Node node = eatNode();
+        while (node != null) {
+            if (nodes == null) {
+                nodes = new ArrayList<>(4);
+                nodes.add(start);
+            }
+            nodes.add(node);
+            node = eatNode();
+        }
+        if (start == null) {
+            return null;
+        } else if (nodes == null) {
+            if (start instanceof ColumnReference) {
+                ((ColumnReference) start).setStartNode(true);
+            }
+            return start;
+        }
+        return new CompoundExpression(start.getStartPosition(),
+                nodes.get(nodes.size() - 1).getEndPosition(),
+                nodes.toArray(new Node[]{})
+        );
     }
 
     @Override
