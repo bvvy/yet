@@ -45,6 +45,7 @@ public class Cell {
             YetContext yetContext = (YetContext) context;
             yetContext.pushIndexContext(this.index);
             this.value = expression.getValue(context);
+            yetContext.popIndexContext();
             this.calculated = true;
         }
         return this.value;
