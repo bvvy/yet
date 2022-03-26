@@ -4,7 +4,7 @@ import org.bvvy.yet.calculator.SheetValue;
 import org.bvvy.yet.sheet.*;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +17,8 @@ public class TestYet {
     public void test() {
 
         Map<String, Object> env = new HashMap<>();
-        Column sumAssured = new Column("sumAssured", "1000");
+        env.put("sumAssured", 1000);
+        Column sumAssured = new Column("sumAssured", "#sumAssured");
         Column premRate = new Column("premiumRate", "200");
         Column premiumFrequency = new Column("premiumFrequency", "12");
         Column modalFactor = new Column("modalFactor", "0.0853");
@@ -37,9 +38,11 @@ public class TestYet {
         sheet.addColumn(modalPremium);
         sheet.addColumn(annualizedPremium);
         sheet.addColumn(totalStandardPremium);
-        SelectionOption option = new SelectionOption("totalStandardPremium", new int[]{1});
-        Selection selection = new Selection(env, Collections.singletonList(option));
-
+        SelectionOption option = new SelectionOption("totalStandardPremium", new int[]{2});
+        SelectionOption option2 = new SelectionOption("modalPremium", new int[]{1});
+        SelectionOption option3 = new SelectionOption("standardPremium", new int[]{1});
+        SelectionOption option4 = new SelectionOption("annualizedPremium", new int[]{10});
+        Selection selection = new Selection(env, Arrays.asList(option, option2, option3, option4));
         Yet yet = new Yet();
         SheetValue sheetValue = yet.calculate(sheet, selection);
         System.out.println(sheetValue);

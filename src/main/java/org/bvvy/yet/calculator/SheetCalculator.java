@@ -28,6 +28,7 @@ public class SheetCalculator {
                 cell.getValue(yetContext);
             }
         }
-        return null;
+        return new SheetValue(innerSheet, selection);
     }
+
 }

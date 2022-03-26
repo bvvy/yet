@@ -36,6 +36,10 @@ public class Cell {
         return calculated;
     }
 
+    public Object getValue() {
+        return value;
+    }
+
     public Object getValue(Context context) {
         if (!calculated) {
             YetContext yetContext = (YetContext) context;

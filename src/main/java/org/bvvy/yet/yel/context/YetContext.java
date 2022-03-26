@@ -1,7 +1,9 @@
 package org.bvvy.yet.yel.context;
 
 import org.bvvy.yel.context.Context;
+import org.bvvy.yel.context.accessor.MapAccessor;
 import org.bvvy.yel.context.accessor.PropertyAccessor;
+import org.bvvy.yel.context.accessor.ReflectivePropertyAccessor;
 import org.bvvy.yel.context.comparator.StandardTypeComparator;
 import org.bvvy.yel.context.comparator.TypeComparator;
 import org.bvvy.yel.context.method.GlobalMethodResolver;
@@ -16,24 +18,26 @@ import org.bvvy.yet.function.support.If;
 import org.bvvy.yet.function.support.Round;
 
 import java.math.RoundingMode;
-import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 public class YetContext implements Context {
 
     private final TypedValue rootObject;
     private String iteratorKey;
     private final Deque<Integer> indexContext = new ArrayDeque<>();
+    private TypedValue env;
 
     public YetContext() {
         this.rootObject = TypedValue.NULL;
     }
 
-    public YetContext(Object rootObject, InnerSheet sheet) {
-//        this.rootObject = new TypedValue(rootObject);
+    public YetContext(Object env, InnerSheet sheet) {
+        this.env = new TypedValue(env);
         this.rootObject = new TypedValue(sheet);
+    }
+
+    public TypedValue getEnv() {
+        return env;
     }
 
     public Integer getActiveIndexContext() {
@@ -62,7 +66,11 @@ public class YetContext implements Context {
 
     @Override
     public List<PropertyAccessor> getPropertyAccessors() {
-        return Collections.singletonList(new SheetAccessor());
+        return Arrays.asList(
+                new SheetAccessor(),
+                new MapAccessor(),
+                new ReflectivePropertyAccessor()
+        );
     }
 
     @Override

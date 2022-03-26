@@ -23,6 +23,7 @@ public class EtParser extends YelParser {
 
     public EtParser() {
         this.configuration = new YelParserConfig();
+        this.configuration.setUseBigDecimalForFloat(true);
     }
 
     public EtParser(YelParserConfig configuration) {
@@ -140,6 +141,28 @@ public class EtParser extends YelParser {
         Node expr = eatExpression();
         eatToken(TokenKind.RSQUARE);
         this.constructedNodes.push(new YetIndexer(t.getStartPos(), t.getEndPos(), expr));
+        return true;
+    }
+
+    @Override
+    protected Node eatStartNode() {
+        if (maybeEatLiteral()) {
+            return pop();
+        } else if (maybeEatParenExpression()) {
+            return pop();
+        } else if (maybeEatNullReference() || maybeEatMethodProperty(false) || maybeEatVar()) {
+            return pop();
+        }
+        return null;
+    }
+
+    protected boolean maybeEatVar() {
+        if (!peekToken(TokenKind.HASH)) {
+            return false;
+        }
+        Token t = takeToken();
+        Token variableName = eatToken(TokenKind.IDENTIFIER);
+        push(new VariableReference(variableName.stringValue(), t.getStartPos(), variableName.getEndPos()));
         return true;
     }
 
