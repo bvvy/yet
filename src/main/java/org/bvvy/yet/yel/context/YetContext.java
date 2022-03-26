@@ -12,7 +12,10 @@ import org.bvvy.yel.context.overloader.OperatorOverloader;
 import org.bvvy.yel.exp.ExpressionState;
 import org.bvvy.yel.exp.TypedValue;
 import org.bvvy.yet.calculator.InnerSheet;
+import org.bvvy.yet.function.support.If;
+import org.bvvy.yet.function.support.Round;
 
+import java.math.RoundingMode;
 import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.Deque;
@@ -74,7 +77,12 @@ public class YetContext implements Context {
 
     @Override
     public List<MethodResolver> getMethodResolvers() {
-        return Collections.singletonList(new GlobalMethodResolver());
+        GlobalMethodResolver methodResolver = new GlobalMethodResolver();
+        methodResolver.registerFunction("ROUND", new Round());
+        methodResolver.registerFunction("ROUNDUP", new Round(RoundingMode.UP));
+        methodResolver.registerFunction("ROUNDDOWN", new Round(RoundingMode.DOWN));
+        methodResolver.registerFunction("IF", new If());
+        return Collections.singletonList(methodResolver);
     }
 
     @Override

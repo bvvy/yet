@@ -23,7 +23,7 @@ public class TestYet {
         Column modalFactor = new Column("modalFactor", "0.0853");
 
         Column standardPremium = new Column("standardPremium", "sumAssured[i] * premiumRate[i] / 1000");
-        Column totalStandardPremium = new Column("totalStandardPremium", "totalStandardPremium[i-1] + standardPremium[i]");
+        Column totalStandardPremium = new Column("totalStandardPremium", "IF(i=0,0,totalStandardPremium[i-1] + standardPremium[i])");
         Column modalPremium = new Column("modalPremium", "standardPremium[i] * modalFactor[i]");
         Column annualizedPremium = new Column("annualizedPremium", "modalPremium[i] * premiumFrequency[i]");
 
