@@ -1,0 +1,118 @@
+= yet
+
+== 介绍
+
+1. 基于Yel表达式引擎.
+2. Excel公式计算模型.常用于计算精算数据等
+3. 完全兼容Excel公式中的语法
+4. 对Excel中函数的支持(开发中...)
+
+== 安装教程
+
+目前还在开发中,功能还不够完善.后面会逐步完善
+
+== 使用说明
+
+[source,java]
+----
+
+public class TestYet {
+
+    @Test
+    public void test() {
+
+        LocalDateTime start = LocalDateTime.now();
+        //--------------------- 定义参数 ---------------------
+        Map<String, Object> env = new HashMap<>();
+        env.put("sumAssured", 1000);
+        env.put("modalFactor", 25);
+        env.put("premRate", 40000);
+        env.put("premFrequency", 4.0);
+        env.put("xRate", Arrays.asList(1.1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.1));
+
+        //--------------------- 创建Column ---------------------
+        //--------------------- 为了使column中的名字和参数中的名字不冲突,在column中取参数用#来取 ---------------------
+        Column sumAssured = new Column("sumAssured", "#sumAssured");
+        //--------------------- 指数 ---------------------
+        Column premRate = new Column("premiumRate", "#premRate ^ (1.0 / 2.0)");
+        Column premiumFrequency = new Column("premiumFrequency", "#premFrequency");
+        //--------------------- 百分比 ---------------------
+        Column modalFactor = new Column("modalFactor", "#modalFactor%");
+        //--------------------- List与Column相对应 ---------------------
+        Column xRate = new Column("xRate", "#xRate[i]");
+        Column standardPremium = new Column("standardPremium", "sumAssured * premiumRate / 1000");
+        //--------------------- 函数IF ---------------------
+        //这里使用了[i-1]来标记上一个元素的值. i 为sheetOption中设置的默认迭代.
+        // 和Excel中一样 单个 = 作为是否等于的判断  <>作为不等于的判断
+        Column totalStandardPremium = new Column("totalStandardPremium", "IF(i=0,0,totalStandardPremium[i-1] + standardPremium)");
+        //如果没有[], 则默认是[i],以下公式和 standardPremium[i] * modalFactor[i]是一致的
+        Column modalPremium = new Column("modalPremium", "standardPremium * modalFactor");
+        Column annualizedPremium = new Column("annualizedPremium", "modalPremium * premiumFrequency * xRate");
+        Column totalAnnualizedPremium = new Column("totalAnnualizedPremium", "IF(i=0,0,totalAnnualizedPremium[i-1] + annualizedPremium)");
+        Column totalAll = new Column("totalAll", "totalStandardPremium + totalAnnualizedPremium");
+
+        //--------------------- 定义Sheet并将column加入 ---------------------
+        SheetOption sheetOption = new SheetOption();
+        Sheet sheet = new Sheet(sheetOption);
+        sheet.addColumn(sumAssured);
+        sheet.addColumn(premRate);
+        sheet.addColumn(premiumFrequency);
+        sheet.addColumn(modalFactor);
+        sheet.addColumn(standardPremium);
+        sheet.addColumn(modalPremium);
+        sheet.addColumn(annualizedPremium);
+        sheet.addColumn(totalStandardPremium);
+        sheet.addColumn(totalAnnualizedPremium);
+        sheet.addColumn(totalAll);
+        sheet.addColumn(xRate);
+
+        //--------------------- 定义需要计算的值是什么,这里计算第10个值 ---------------------
+        SelectionOption totalAnnualizedPremium_ = new SelectionOption("totalAnnualizedPremium", new int[]{10});
+        SelectionOption totalAll_ = new SelectionOption("totalAll", new int[]{10});
+        SelectionOption totalStandardPremium_ = new SelectionOption("totalStandardPremium", new int[]{10});
+        Selection selection = new Selection(env, Arrays.asList(
+                totalStandardPremium_,
+                totalAnnualizedPremium_,
+                totalAll_
+        )
+        );
+        //--------------------- 开始计算 ---------------------
+        Yet yet = new Yet();
+        SheetValue sheetValue = yet.calculate(sheet, selection);
+        //--------------------- 输出结果 ---------------------
+        System.out.println(start.until(LocalDateTime.now(), ChronoUnit.MILLIS));
+        System.out.println(sheetValue);
+
+    }
+
+}
+----
+
+以下为输出结果.
+只会计算需要计算的值.不会全部计算.
+因为只计算第10个值,totalStandardPremium和totalAnnualizedPremium 为 [i-1] 累加所以会从头算起直到第10个.
+而totalAll第10个值不需要累计,所以只会有第10个的值.前面的为null
+
+
+|===
+|# | totalStandardPremium | totalAnnualizedPremium | totalAll
+|0 | 0 | 0 | null
+|1 | 200.0 | 200.0000 | null
+|2 | 400.0 | 400.0000 | null
+|3 | 600.0 | 600.0000 | null
+|4 | 800.0 | 800.0000 | null
+|5 | 1000.0 | 1000.0000 | null
+|6 | 1200.0 | 1200.0000 | null
+|7 | 1400.0 | 1400.0000 | null
+|8 | 1600.0 | 1600.0000 | null
+|9 | 1800.0 | 1800.0000 | null
+|10 | 2000.0 | 2020.00000 | 4020.00000
+|===
+
+
+Process finished with exit code 0
+
+
+
+
+
